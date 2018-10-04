@@ -16,6 +16,10 @@ namespace Bug_Tracker.Models
         {
             Project = new HashSet<Project>();
         }
+        public string DisplayName { get; set; }
+        public string LastName { get; set; }
+        public string FirstName { get; set; }
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
@@ -36,5 +40,6 @@ namespace Bug_Tracker.Models
         {
             return new ApplicationDbContext();
         }
+        public DbSet<Project> Projects { get; set; }
     }
 }
