@@ -8,6 +8,7 @@ namespace Bug_Tracker.Models
     public class IndexViewModel
     {
         public bool HasPassword { get; set; }
+        public bool HasName { get; set; }
         public IList<UserLoginInfo> Logins { get; set; }
         public string PhoneNumber { get; set; }
         public bool TwoFactor { get; set; }
@@ -56,6 +57,14 @@ namespace Bug_Tracker.Models
         [Display(Name = "Confirm new password")]
         [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+    }
+    public class ChangeNameViewModel
+    {
+        [Required]
+        [StringLength(100, ErrorMessage = "Input Field is empty.", MinimumLength = 1)]
+        [DataType(DataType.Text)]
+        [Display(Name = "New name")]
+        public string NewName { get; set; }
     }
 
     public class AddPhoneNumberViewModel

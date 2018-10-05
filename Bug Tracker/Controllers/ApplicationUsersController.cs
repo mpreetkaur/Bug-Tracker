@@ -48,10 +48,13 @@ namespace Bug_Tracker.Controllers
         public ActionResult ChangeRole(UserRoleViewModel model)
         {
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+
             //STEP 1: Find the user
             var user = userManager.FindById(model.Id);
+
             //STEP 2: Get UserRoles:
-            var userRoles = userManager.GetRoles(user.Id);      
+            var userRoles = userManager.GetRoles(user.Id);   
+            
             //STEP 3: Remove the roles from the user
             foreach (var role in userRoles)
             {

@@ -119,10 +119,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
             <!--logo and iconic logo start-->
             <div class="logo">
-                <h1><a href="#">Bug <span>Tracker</span></a></h1>
+                <h1><a href="@Url.Action("Index", "")">Bug <span>Tracker</span></a></h1>
             </div>
             <div class="logo-icon text-center">
-                <a href="#"><i class="lnr lnr-home"></i> </a>
+                <a href="@Url.Action("Index", "")"><i class="lnr lnr-home"></i> </a>
             </div>
 
             <!--logo and iconic logo end-->
@@ -132,7 +132,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 <ul class="nav nav-pills nav-stacked custom-nav">
                     <li class="active"><a href="index.html"><i class="lnr lnr-power-switch"></i><span>Dashboard</span></a></li>
                     <li class="menu-list">
-                        <a href="#">
+                        <a href="@Url.Action("Projects", "", "Projects")">
                             <i class="lnr lnr-cog"></i>
                             <span>Components</span>
                         </a>
@@ -157,7 +157,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
                     {
                         <li class="menu-list">
-                            <a href="@Url.Action("Projects", "", "Projects")"><i class="lnr lnr-book"></i>  <span>All Projects</span></a>
+                            <a href="@Url.Action("Index" ,"Projects","Projects")"><i class="lnr lnr-book"></i>  <span>All Projects</span></a>
                         </li>
                     }
                 </ul>
@@ -177,7 +177,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     <div class="user-panel-top">
                         <div class="profile_details_left">
                             <ul class="nofitications-dropdown">
-                                <li class="dropdown"> @Html.ActionLink("Home", "Index", "Home")</li>
+                                <li class="dropdown">@Html.ActionLink("Home", "Index", "Home")</li>
                                 <li class="dropdown">@Html.ActionLink("About", "About", "Home")</li>
                                 <li class="dropdown">@Html.ActionLink("Contact", "Contact", "Home")</li>
                                 <li class="dropdown"> @Html.Partial("_LoginPartial")</li>
