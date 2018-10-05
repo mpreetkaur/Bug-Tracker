@@ -8,10 +8,13 @@
     <div class="col-md-8">
         <section id="loginForm" style="width: 600px">
             <h2>Index</h2>
-
-            <p>
-                @Html.ActionLink("Create New", "Create")
-            </p>
+            @if (User.IsInRole("Admin"))
+            {
+                <p>
+                    @Html.ActionLink("Create New", "Create")
+                </p>
+            }
+                
             <table class="table">
                 <tr>
                     <th>

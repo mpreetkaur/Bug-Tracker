@@ -23,7 +23,10 @@ namespace Bug_Tracker.Migrations
 
             if (!context.Roles.Any(r => r.Name == "Admin"))
                 {
-                    roleManager.Create(new IdentityRole { Name = "Admin" });
+                    roleManager.Create(new IdentityRole("Admin" ));
+                    var role = new IdentityRole("Admin");
+
+                    roleManager.Create(role);
             }
             if (!context.Roles.Any(r => r.Name == "Project Manager"))
             {
@@ -44,10 +47,11 @@ namespace Bug_Tracker.Migrations
             {
                 adminUser.UserName = "admin@bgTracker.com";
                 adminUser.Email = "admin@bgTracker.com";
-                adminUser.LastName = "Admin";
-                adminUser.FirstName = "Zerg";
-                adminUser.DisplayName = "z3rg";
-                userManager.Create(adminUser, "admin@bgTracker.com");
+                adminUser.Name = "Admin";
+                adminUser.LastName = "User";
+                adminUser.FirstName = "Admin";
+                adminUser.DisplayName = "Admin";
+                userManager.Create(adminUser, "Password-1");
             }
             else
             {
