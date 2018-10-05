@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Bug_Tracker.Models;
+using System.Net;
 
 namespace Bug_Tracker.Controllers
 {
@@ -15,7 +16,7 @@ namespace Bug_Tracker.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-
+        private ApplicationDbContext db = new ApplicationDbContext();
         public ManageController()
         {
         }
@@ -61,6 +62,7 @@ namespace Bug_Tracker.Controllers
                 : message == ManageMessageId.Error ? "An error has occurred."
                 : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
+                : message == ManageMessageId.ChangeNameSuccess ? "Your Name was changed."
                 : "";
 
             var userId = User.Identity.GetUserId();
@@ -245,6 +247,40 @@ namespace Bug_Tracker.Controllers
         }
 
         //
+        //<---------------------------------------------------------------------------------->//
+        //
+        // GET: /Manage/ChangeName
+        // GET: Projects/Edit/5
+        public ActionResult ChangeName()
+        {
+            var userId = User.Identity.GetUserId();
+            var user = db.Users.FirstOrDefault(p => p.Id == userId);
+            var model = new ChangeNameViewModel();
+            model.NewName = user.Name;
+            return View(model);
+        }
+
+        // POST: Projects/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangeName(ChangeNameViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var userId = User.Identity.GetUserId();
+                var dbUser = db.Users.FirstOrDefault(p => p.Id == userId);
+                dbUser.Name = model.NewName;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(model);
+
+        }
+
+        //<---------------------------------------------------------------------------------->//
+
         // GET: /Manage/SetPassword
         public ActionResult SetPassword()
         {
@@ -381,7 +417,8 @@ namespace Bug_Tracker.Controllers
             SetPasswordSuccess,
             RemoveLoginSuccess,
             RemovePhoneSuccess,
-            Error
+            Error,
+            ChangeNameSuccess
         }
 
 #endregion
