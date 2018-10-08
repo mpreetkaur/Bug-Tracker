@@ -130,7 +130,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
                 <!--sidebar nav start-->
                 <ul class="nav nav-pills nav-stacked custom-nav">
-                    <li class="active"><a href="index.html"><i class="lnr lnr-power-switch"></i><span>Dashboard</span></a></li>
+                    <li class="active"><a href="@Url.Action("Index", "")"><i class="lnr lnr-power-switch"></i><span>Dashboard</span></a></li>
                     <li class="menu-list">
                         <a href="@Url.Action("Projects", "", "Projects")">
                             <i class="lnr lnr-cog"></i>
@@ -177,9 +177,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     <div class="user-panel-top">
                         <div class="profile_details_left">
                             <ul class="nofitications-dropdown">
-                                <li class="dropdown">@Html.ActionLink("Home", "Index", "Home")</li>
-                                <li class="dropdown">@Html.ActionLink("About", "About", "Home")</li>
-                                <li class="dropdown">@Html.ActionLink("Contact", "Contact", "Home")</li>
                                 <li class="dropdown"> @Html.Partial("_LoginPartial")</li>
                             </ul>
                         </div>
