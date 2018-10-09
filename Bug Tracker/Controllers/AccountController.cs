@@ -153,6 +153,11 @@ namespace Bug_Tracker.Controllers
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Name = model.Name };
                 var result = await UserManager.CreateAsync(user, model.Password);
+
+                if (!UserManager.IsInRole(user.Id, "Submitter"))
+                {
+                    UserManager.AddToRole(user.Id, "Submitter");
+                }
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
