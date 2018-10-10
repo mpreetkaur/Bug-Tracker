@@ -18,6 +18,13 @@ namespace Bug_Tracker.Models
         }
 
         public virtual ICollection<Project> Projects { get; set; }
+
+        [InverseProperty("Creator")]
+        public virtual ICollection<Ticket> CreatedTickets { get; set; }
+
+        [InverseProperty("Assignee")]
+        public virtual ICollection<Ticket> AssignedTickets { get; set; }
+
         public string Name { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -43,8 +50,11 @@ namespace Bug_Tracker.Models
         {
             return new ApplicationDbContext();
         }
-        public System.Data.Entity.DbSet<Bug_Tracker.Models.Classes.Project> Projects { get; set; }
 
+        public System.Data.Entity.DbSet<Bug_Tracker.Models.Classes.Project> Projects { get; set; }
         public System.Data.Entity.DbSet<Bug_Tracker.Models.Classes.Ticket> Tickets { get; set; }
+        public System.Data.Entity.DbSet<Bug_Tracker.Models.Classes.TicketStatus> TicketStatuses { get; set; }
+        public System.Data.Entity.DbSet<Bug_Tracker.Models.Classes.TicketPriority> TicketPriorities { get; set; }
+        public System.Data.Entity.DbSet<Bug_Tracker.Models.Classes.TicketType> TicketTypes { get; set; }
     }
 }

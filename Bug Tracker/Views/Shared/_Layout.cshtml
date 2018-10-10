@@ -149,6 +149,16 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                             <li><a href="#">Submitter</a></li>
                         </ul>
                     </li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="menu-list">
+                            <a href="#"><i class="lnr lnr-layers"></i> <span>Tickets</span></a>
+                            <ul class="sub-menu-list">
+                                <li><a href="@Url.Action("Index", "Tickets")">All Tickets</a> </li>
+                            </ul>
+                        </li>
+                    }
+
                     @if (User.IsInRole("Admin"))
                     {
                         <li><a href="@Url.Action("Index", "ApplicationUsers")"><i class="lnr lnr-menu"></i> <span>Change Role</span></a></li>
@@ -185,6 +195,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 </div>
                 <!--notification menu end -->
             </div>
+
             <!-- //header-ends -->
             @RenderBody()
         </div>
