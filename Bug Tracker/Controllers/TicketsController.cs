@@ -19,12 +19,20 @@ namespace Bug_Tracker.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Tickets
-        public ActionResult Index(int? page)
+        public ActionResult Index(int? page, string searchString)
         {
             var tickets = db.Tickets.Include(t => t.Assignee).Include(t => t.Creator).Include(t => t.Project).Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType);
             int pageSize = 8;
             int pageNumber = (page ?? 1);
-            return View(db.Tickets.OrderBy(p => p.Id).ToPagedList(pageNumber, pageSize));
+            var ticketQuery = db.Tickets.OrderBy(p => p.Id).AsQueryable();
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                ticketQuery = ticketQuery.Where(p => p.Name.Contains(searchString) ||
+                                p.Description.Contains(searchString)).AsQueryable();
+            }
+
+            ViewBag.searchString = searchString;
+            return View(ticketQuery.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Tickets/Details/5
