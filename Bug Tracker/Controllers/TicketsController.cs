@@ -14,25 +14,20 @@ using PagedList.Mvc;
 
 namespace Bug_Tracker.Controllers
 {
+    [Authorize]
     public class TicketsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Tickets
-        public ActionResult Index(int? page, string searchString)
+        public ActionResult Index(string id)
         {
-            var tickets = db.Tickets.Include(t => t.Assignee).Include(t => t.Creator).Include(t => t.Project).Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType);
-            int pageSize = 8;
-            int pageNumber = (page ?? 1);
-            var ticketQuery = db.Tickets.OrderBy(p => p.Id).AsQueryable();
-            if (!string.IsNullOrWhiteSpace(searchString))
+            if (!string.IsNullOrWhiteSpace(id))
             {
-                ticketQuery = ticketQuery.Where(p => p.Name.Contains(searchString) ||
-                                p.Description.Contains(searchString)).AsQueryable();
+                return View(db.Tickets.Include(t => t.TicketPriority).Include(t => t.Project).Include(t => t.TicketStatus).Include(t => t.TicketType).Where(p => p.CreatorId == User.Identity.GetUserId()).ToList());
             }
+            return View(db.Tickets.Include(t => t.TicketPriority).Include(t => t.Project).Include(t => t.TicketStatus).Include(t => t.TicketType).ToList());
 
-            ViewBag.searchString = searchString;
-            return View(ticketQuery.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Tickets/Details/5
@@ -51,6 +46,7 @@ namespace Bug_Tracker.Controllers
         }
 
         // GET: Tickets/Create
+        [Authorize(Roles ="Submitter")]
         public ActionResult Create()
         {
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name");
@@ -65,12 +61,13 @@ namespace Bug_Tracker.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Description,AssignId,ProjectId,TicketTypeId,TicketPriorityId")] Ticket ticket)
+        [Authorize(Roles = "Submitter")]
+        public ActionResult Create([Bind(Include = "Id,Name,Description,AssignId,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId")] Ticket ticket)
         {
             if (ModelState.IsValid)
             {
                 ticket.CreatorId = User.Identity.GetUserId();
-                ticket.TicketStatusId = 1;
+                ticket.TicketStatusId = 3;
                 db.Tickets.Add(ticket);
                 db.SaveChanges();
                 return RedirectToAction("Index");

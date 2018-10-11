@@ -97,7 +97,11 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     @*<link href="css/animate.css" rel="stylesheet" type="text/css" media="all">*@
     <link href="~/Content/animate.css" rel="stylesheet" />
 
-    <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css">
+    @*<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css">*@
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+
+
 
     @*<script src="js/wow.min.js"></script>*@
     <script src="~/Scripts/wow.min.js"></script>
@@ -165,6 +169,11 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     @if (User.IsInRole("Admin"))
                     {
                         <li><a href="@Url.Action("Index", "ApplicationUsers")"><i class="lnr lnr-menu"></i> <span>Change Role</span></a></li>
+                    } 
+
+                    @if (User.IsInRole("Submitter"))
+                    {
+                        <li><a href="@Url.Action("Create", "Tickets")"><i class="lnr lnr-tag"></i> <span>Create Ticket</span></a></li>
                     }
 
                     @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
@@ -209,7 +218,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         <!--footer section end-->
     </section>
 
-    @RenderSection("Scripts", false);
+
     @*<script src="js/jquery.nicescroll.js"></script>*@
     <script src="~/Scripts/jquery.nicescroll.js"></script>
     @*<script src="js/scripts.js"></script>*@
@@ -217,5 +226,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <!-- Bootstrap Core JavaScript -->
     @*<script src="js/bootstrap.min.js"></script>*@
     <script src="~/Scripts/bootstrap.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    @RenderSection("Scripts", required: false);
 </body>
 </html>
