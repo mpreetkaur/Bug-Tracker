@@ -9,6 +9,8 @@ using System.Web.Mvc;
 using Bug_Tracker.Models;
 using Bug_Tracker.Models.Classes;
 using Microsoft.AspNet.Identity;
+using PagedList;
+using PagedList.Mvc;
 
 namespace Bug_Tracker.Controllers
 {
@@ -17,10 +19,12 @@ namespace Bug_Tracker.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Tickets
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
             var tickets = db.Tickets.Include(t => t.Assignee).Include(t => t.Creator).Include(t => t.Project).Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType);
-            return View(tickets.ToList());
+            int pageSize = 8;
+            int pageNumber = (page ?? 1);
+            return View(db.Tickets.OrderBy(p => p.Id).ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Tickets/Details/5
@@ -99,11 +103,14 @@ namespace Bug_Tracker.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,CreatorId,TicketStatusId,AssigneeId")] Ticket ticket)
+        public ActionResult Edit([Bind(Include = "Id,Name,Description,Updated,ProjectId,TicketTypeId,TicketPriorityId,CreatorId")] Ticket ticket)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(ticket).State = EntityState.Modified;
+                var DBTicket = db.Tickets.FirstOrDefault(p => p.Id == ticket.Id);
+                DBTicket.Name = ticket.Name;
+                DBTicket.Description = ticket.Description;
+                DBTicket.Updated = DateTime.Now;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
