@@ -212,6 +212,7 @@
     <Compile Include="Helpers\UserRoleHelper.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Classes\AssignTicket.cs" />
     <Compile Include="Models\Classes\Project.cs" />
     <Compile Include="Models\Classes\TicketPriority.cs" />
     <Compile Include="Models\Classes\Ticket.cs" />

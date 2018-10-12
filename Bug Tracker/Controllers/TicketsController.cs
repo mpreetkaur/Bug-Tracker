@@ -44,6 +44,13 @@ namespace Bug_Tracker.Controllers
             }
             return View(ticket);
         }
+        
+        public ActionResult SubmitterTickets()
+        {
+            string submitterId = User.Identity.GetUserId();
+            var tickets = db.Tickets.Where(t => t.CreatorId == submitterId).Include(t => t.Creator).Include(t => t.Assignee).Include(t => t.Project);
+            return View("Index", tickets.ToList());
+        }
 
         // GET: Tickets/Create
         [Authorize(Roles ="Submitter")]
@@ -108,13 +115,14 @@ namespace Bug_Tracker.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Description,Updated,ProjectId,TicketTypeId,TicketPriorityId,CreatorId")] Ticket ticket)
+        public ActionResult Edit([Bind(Include = "Id,Name,Description,Updated,ProjectId,TicketTypeId,TicketPriorityId,CreatorId,TicketStatusId")] Ticket ticket)
         {
             if (ModelState.IsValid)
             {
                 var DBTicket = db.Tickets.FirstOrDefault(p => p.Id == ticket.Id);
                 DBTicket.Name = ticket.Name;
                 DBTicket.Description = ticket.Description;
+                DBTicket.TicketStatusId = ticket.TicketStatusId;
                 DBTicket.Updated = DateTime.Now;
                 db.SaveChanges();
                 return RedirectToAction("Index");

@@ -72,12 +72,10 @@ namespace Bug_Tracker.Models
         [Required]
         [Display(Name = "Name")]
         public string Name { get; set; }
-
-        [Required]
+        
         [Display(Name = "LastName")]
         public string LastName { get; set; }
-
-        [Required]
+        
         [Display(Name = "DisplayName")]
         public string DisplayName { get; set; }
 

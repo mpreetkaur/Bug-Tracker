@@ -11,7 +11,7 @@
             @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
             {
                 <p>
-                    @Html.ActionLink("Create New", "Create")
+                    @Html.ActionLink("Create New Project", "Create")
                 </p>
             }
                 
@@ -19,6 +19,9 @@
                 <tr>
                     <th>
                         @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        Assigned User
                     </th>
                     <th></th>
                 </tr>
@@ -28,6 +31,9 @@
                     <tr>
                         <td>
                             @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            
                         </td>
                         <td>
                             @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
