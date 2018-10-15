@@ -126,7 +126,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
             <!--logo and iconic logo start-->
             <div class="logo">
-                <h1><a href="@Url.Action("Index", "")">Bug <span>Tracker</span></a></h1>
+                <h2><a href="@Url.Action("Index", "")"><span>Bug Tracker</span></a></h2>
             </div>
             <div class="logo-icon text-center">
                 <a href="@Url.Action("Index", "")"><i class="lnr lnr-home"></i> </a>
@@ -148,10 +148,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         <li>
                             <a href="#"><i class="lnr lnr-tag"></i> <span>Tickets</span></a>
                             <ul class="sub-menu-list">
-                                <li><a href="@Url.Action("Index", "Tickets", new { id="" })"> <i class="fa fa-info-circle nav_icon"></i>All Tickets</a></li>
-                                <li><a href="@Url.Action("Index", "Projects",new { Manager = "User"})"><span>Your Projects</span> </a></li>
-                                <li><a href="@Url.Action("Index", "Tickets", new { id = "devTicket" })">><span>Assigned Tickets</span></a></li>
-                                <li> <a href="@Url.Action("index", "Tickets", new { id = "projectsTicket" })"><span class="nav-label">Project Tickets</span> </a></li>
+                                <li><a href="@Url.Action("Index", "Tickets", new { id="" })">All Tickets</a></li>
+                                <li><a href="@Url.Action("Index", "Projects",new { Manager = "User"})">Your Projects</a></li>
+                                <li><a href="@Url.Action("Index", "Tickets", new { id = "devTicket" })">Assigned Tickets</a></li>
+                                <li><a href="@Url.Action("index", "Tickets", new { id = "projectsTicket" })">Project Tickets</a></li>
                             </ul>
                         </li>
                     }
@@ -171,14 +171,11 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
                     @if (User.IsInRole("Project Manager"))
                     {
-
                         <li>
-                            <a href="#"><i class="lnr lnr-tag"></i> <span class="nav-label">Tickets</span></a>
+                            <a href="#"><i class="lnr lnr-tag"></i><span>Tickets</span></a>
                             <ul class="sub-menu-list">
-                                <li> <a href="@Url.Action("index", "Tickets", new { id = "" })"><span class="nav-label">All Tickets</span> </a></li>
-                                <li>
-                                    <a href="@Url.Action("Index", "Tickets", new { id = "myTicket" })"><span class="nav-label">Project Tickets</span> </a>
-                                </li>
+                                <li><a href="@Url.Action("index", "Tickets", new { id = ""})">All Tickets</a></li>
+                                <li><a href="@Url.Action("Index", "Tickets", new { id = "Manager Tickets"})">Projects Tickets</a></li>
                             </ul>
                         </li>
                     }

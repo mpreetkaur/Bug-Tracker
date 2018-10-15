@@ -30,9 +30,18 @@ namespace Bug_Tracker.Models.Classes
 
         public string AssigneeId { get; set; }
         public virtual ApplicationUser Assignee { get; set; }
+
+        public virtual ICollection<TicketAttachment> Attachments { get; set; }
+        public virtual ICollection<TicketComment> Comments { get; set; }
+        public virtual ICollection<TicketHistory> Histories { get; set; }
+
         public Ticket()
         {
             Created = DateTime.Now;
+            Attachments = new HashSet<TicketAttachment>();
+            Comments = new HashSet<TicketComment>();
+            Histories = new HashSet<TicketHistory>();
+
         }
     }
 }

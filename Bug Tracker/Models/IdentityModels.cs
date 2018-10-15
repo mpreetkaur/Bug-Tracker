@@ -15,6 +15,9 @@ namespace Bug_Tracker.Models
         public ApplicationUser()
         {
             Projects = new HashSet<Project>();
+            Attachments = new HashSet<TicketAttachment>();
+            Comments = new HashSet<TicketComment>();
+            Histories = new HashSet<TicketHistory>();
         }
 
         public virtual ICollection<Project> Projects { get; set; }
@@ -24,6 +27,12 @@ namespace Bug_Tracker.Models
 
         [InverseProperty("Assignee")]
         public virtual ICollection<Ticket> AssignedTickets { get; set; }
+
+        public virtual ICollection<TicketAttachment> Attachments { get; set; }
+
+        public virtual ICollection<TicketComment> Comments { get; set; }
+
+        public virtual ICollection<TicketHistory> Histories { get; set; }
 
         public string Name { get; set; }
         public string FirstName { get; set; }
@@ -56,5 +65,8 @@ namespace Bug_Tracker.Models
         public System.Data.Entity.DbSet<Bug_Tracker.Models.Classes.TicketStatus> TicketStatuses { get; set; }
         public System.Data.Entity.DbSet<Bug_Tracker.Models.Classes.TicketPriority> TicketPriorities { get; set; }
         public System.Data.Entity.DbSet<Bug_Tracker.Models.Classes.TicketType> TicketTypes { get; set; }
+        public DbSet<TicketAttachment> TicketAttachments { get; set; }
+        public DbSet<TicketComment> TicketComments { get; set; }
+        public DbSet<TicketHistory> TicketHistories { get; set; }
     }
 }

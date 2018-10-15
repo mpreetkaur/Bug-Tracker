@@ -31,7 +31,7 @@ namespace Bug_Tracker.Controllers
                 {
                     var dbUSer = db.Users.FirstOrDefault(p => p.Id == userId);
                     var myProject = dbUSer.Projects.Select(p => p.Id);
-                    var ticket = db.Tickets.Where(p => myProject.Contains(p.Id)).ToList();
+                    var ticket = db.Tickets.Where(p => myProject.Contains(p.ProjectId)).ToList();
                     return View(ticket);
                 }
                 else if (role.Contains("Developer"))
@@ -40,7 +40,7 @@ namespace Bug_Tracker.Controllers
                     {
                         var dbUSer = db.Users.FirstOrDefault(p => p.Id == userId);
                         var myProject = dbUSer.Projects.Select(p => p.Id);
-                        var ticket = db.Tickets.Where(p => myProject.Contains(p.Id)).ToList();
+                        var ticket = db.Tickets.Where(p => myProject.Contains(p.ProjectId)).ToList();
                         return View(ticket);
                     }
                     else if (id == "devTicket")

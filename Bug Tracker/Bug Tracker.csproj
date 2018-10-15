@@ -215,6 +215,9 @@
     <Compile Include="Models\Classes\AssignTicket.cs" />
     <Compile Include="Models\Classes\AssignTicketToDeveloper.cs" />
     <Compile Include="Models\Classes\Project.cs" />
+    <Compile Include="Models\Classes\TicketAttachment.cs" />
+    <Compile Include="Models\Classes\TicketComment.cs" />
+    <Compile Include="Models\Classes\TicketHistory.cs" />
     <Compile Include="Models\Classes\TicketPriority.cs" />
     <Compile Include="Models\Classes\Ticket.cs" />
     <Compile Include="Models\Classes\TicketStatus.cs" />
