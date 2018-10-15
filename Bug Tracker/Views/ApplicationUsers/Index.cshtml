@@ -33,9 +33,13 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.Email)
                         </td>
-                        <td>
-                            @Html.ActionLink("Change Role", "ChangeRole", new { id = item.Id })
-                        </td>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <td>
+                                @Html.ActionLink("Change Role", "ChangeRole", new { id = item.Id })
+                            </td>
+                        }
+
                     </tr>
                 }
             </tbody>
