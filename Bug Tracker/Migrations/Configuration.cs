@@ -1,7 +1,6 @@
 namespace Bug_Tracker.Migrations
 {
     using Bug_Tracker.Models;
-    using Bug_Tracker.Models.Classes;
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.Identity.EntityFramework;
     using System;
@@ -23,11 +22,8 @@ namespace Bug_Tracker.Migrations
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
 
             if (!context.Roles.Any(r => r.Name == "Admin"))
-                {
-                    roleManager.Create(new IdentityRole("Admin" ));
-                    var role = new IdentityRole("Admin");
-
-                    roleManager.Create(role);
+            {
+                roleManager.Create(new IdentityRole { Name = "Admin" });
             }
             if (!context.Roles.Any(r => r.Name == "Project Manager"))
             {
@@ -81,7 +77,7 @@ namespace Bug_Tracker.Migrations
                 new Models.Classes.TicketStatus() { Id = 3, Name = "Not Started" },
                 new Models.Classes.TicketStatus() { Id = 4, Name = "In progress" });
 
-            context.SaveChanges();
+            //context.SaveChanges();
         }
     }
 }

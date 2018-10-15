@@ -137,51 +137,64 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
                 <!--sidebar nav start-->
                 <ul class="nav nav-pills nav-stacked custom-nav">
-                    <li class="active"><a href="@Url.Action("Index", "")"><i class="lnr lnr-power-switch"></i><span>Dashboard</span></a></li>
-                    <li class="menu-list">
-                        <a href="@Url.Action("Projects", "", "Projects")">
-                            <i class="lnr lnr-cog"></i>
-                            <span>Components</span>
-                        </a>
-                        <ul class="sub-menu-list">
-                            <li>@Html.ActionLink("Projects", "", "Projects")</li>
-                        </ul>
-                    </li>
-                    <li class="menu-list">
-                        <a href="#"><i class="lnr lnr-user"></i> <span>Users</span></a>
-                        <ul class="sub-menu-list">
-                            <li><a href="#">Admin</a> </li>
-                            <li><a href="#">Project Manager</a></li>
-                            <li><a href="#">Developer</a></li>
-                            <li><a href="#">Submitter</a></li>
-                        </ul>
-                    </li>
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <li class="menu-list">
-                            <a href="#"><i class="lnr lnr-layers"></i> <span>Tickets</span></a>
-                            <ul class="sub-menu-list">
-                                <li><a href="@Url.Action("Index", "Tickets")">All Tickets</a> </li>
-                                <li><a href="@Url.Action("SubmitterTickets", "Tickets", new { Id = "User"})">Your Ticket</a></li>
+                    <li><a href="@Url.Action("Index","Home")"><i class="lnr lnr-power-switch"></i><span>Dashboard</span></a></li>
 
-                            </ul>
-                        </li>
-                    }
+                    <li>
+                        <a href="@Url.Action("Index","Manage")"><i class="lnr lnr-user"></i> <span>Edit Profile</span></a>
+                    </li>
 
                     @if (User.IsInRole("Admin"))
                     {
-                        <li><a href="@Url.Action("Index", "ApplicationUsers")"><i class="lnr lnr-menu"></i> <span>Change Role</span></a></li>
-                    }
-
-                    @if (User.IsInRole("Submitter"))
-                    {
-                        <li><a href="@Url.Action("Create", "Tickets")"><i class="lnr lnr-tag"></i> <span>Create Ticket</span></a></li>
+                    <li><a href="@Url.Action("Index", "ApplicationUsers")"><i class="lnr lnr-users"></i><span>Change Role</span></a></li>
                     }
 
                     @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
                     {
-                        <li class="menu-list">
-                            <a href="@Url.Action("Index" ,"Projects","Projects")"><i class="lnr lnr-book"></i>  <span>All Projects</span></a>
+                        <li>
+                            <a href="#"><i class="lnr lnr-list"></i><span>Projects</span></a>
+                            <ul class="sub-menu-list">
+                                <li><a href="@Url.Action("Index", "Projects", new { Manager = ""})">All Projects</a></li>
+                                <li><a href="@Url.Action("Index", "Projects",new { Manager = "Manager"})">Your Projects</a></li>
+                            </ul>
+                        </li>
+                    }
+
+                    @if (User.IsInRole("Submitter"))
+                    {
+                        <li>
+                            <a href="#"><i class="lnr lnr-tag"></i> <span>Tickets</span></a>
+                            <ul class="sub-menu-list">
+                                <li><a href="@Url.Action("Index", "Tickets", new { id="" })">All Tickets</a></li>
+                                <li><a href="@Url.Action("Index", "Tickets",new { id="User"})">Your Tickets</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="@Url.Action("Create","Tickets")" class=" hvr-bounce-to-right"><i class="fa fa-dashboard nav_icon "></i><span class="nav-label">Create Ticket</span></a></li>
+                    }
+
+                    @if (User.IsInRole("Developer"))
+                    {
+                        <li>
+                            <a href="#"><i class="lnr lnr-tag"></i> <span>Tickets</span></a>
+                            <ul class="sub-menu-list">
+                                <li><a href="@Url.Action("Index", "Tickets", new { id="" })"> <i class="fa fa-info-circle nav_icon"></i>All Tickets</a></li>
+                                <li><a href="@Url.Action("Index", "Projects",new { Manager = "User"})"><span>Your Projects</span> </a></li>
+                                <li><a href="@Url.Action("Index", "Tickets", new { id = "myTicket" })">><span>Assigned Tickets</span></a></li>
+                                <li> <a href="@Url.Action("index", "Tickets", new { id = "myProjectsTicket" })"><span class="nav-label">Project Tickets</span> </a></li>
+                            </ul>
+                        </li>
+                    }
+
+                    @if (User.IsInRole("Project Manager"))
+                    {
+
+                        <li>
+                            <a href="#"><i class="lnr lnr-tag"></i> <span class="nav-label">Tickets</span></a>
+                            <ul class="sub-menu-list">
+                                <li> <a href="@Url.Action("index", "Tickets", new { id = "" })"><span class="nav-label">All Tickets</span> </a></li>
+                                <li>
+                                    <a href="@Url.Action("Index", "Tickets", new { id = "myTicket" })"><span class="nav-label">Project Tickets</span> </a>
+                                </li>
+                            </ul>
                         </li>
                     }
                 </ul>

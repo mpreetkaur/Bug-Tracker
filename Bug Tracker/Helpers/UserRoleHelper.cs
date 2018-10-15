@@ -1,11 +1,11 @@
-﻿using Bug_Tracker.Models;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-namespace Bug_Tracker.Helper
+
+namespace Bug_Tracker.Models.Helpers
 {
     public class UserRoleHelper
     {
@@ -27,6 +27,12 @@ namespace Bug_Tracker.Helper
         public List<string> GetUserRoles(string id)
         {
             return UserManager.GetRoles(id).ToList();
+        }
+        public ICollection<ApplicationUser> UsersInRole(string role)
+        {
+            var roleId = Db.Roles.Where(p => p.Name == role).Select(p => p.Id).FirstOrDefault();
+
+            return Db.Users.Where(p => p.Roles.Any(t => t.RoleId == roleId)).ToList();
         }
     }
 }

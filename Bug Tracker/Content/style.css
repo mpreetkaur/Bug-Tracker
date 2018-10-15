@@ -7581,3 +7581,8 @@ textarea.form-control1.control2 {
 /*.form-control {
     width: 35%;
 }*/
+h2{
+    text-align: center;
+    font-size: 40px;
+    padding: 10px;
+}

@@ -1,36 +1,61 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using Bug_Tracker.Models;
 using Bug_Tracker.Models.Classes;
+using Bug_Tracker.Models.Helpers;
 using Microsoft.AspNet.Identity;
-using PagedList;
-using PagedList.Mvc;
 
 namespace Bug_Tracker.Controllers
 {
     [Authorize]
     public class TicketsController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+       private ApplicationDbContext db = new ApplicationDbContext();
+        private UserRoleHelper UserRoleHelper { get; set; }
 
         // GET: Tickets
         public ActionResult Index(string id)
         {
             if (!string.IsNullOrWhiteSpace(id))
             {
-                return View(db.Tickets.Include(t => t.TicketPriority).Include(t => t.Project).Include(t => t.TicketStatus).Include(t => t.TicketType).Where(p => p.CreatorId == User.Identity.GetUserId()).ToList());
+                var userRoleHelper = new UserRoleHelper();
+                var userId = User.Identity.GetUserId();
+                var role = userRoleHelper.GetUserRoles(userId);
+                ViewBag.User = "User";
+
+                if (role.Contains("Project Manager"))
+                {
+                    var dbUSer = db.Users.FirstOrDefault(p => p.Id == userId);
+                    var myProject = dbUSer.Projects.Select(p => p.Id);
+                    var ticket = db.Tickets.Where(p => myProject.Contains(p.Id)).ToList();
+                    return View(ticket);
+                }
+                else if (role.Contains("Developer"))
+                {
+                    if (id == "myProjectsTicket")
+                    {
+                        var dbUSer = db.Users.FirstOrDefault(p => p.Id == userId);
+                        var myProject = dbUSer.Projects.Select(p => p.Id);
+                        var ticket = db.Tickets.Where(p => myProject.Contains(p.Id)).ToList();
+                        return View(ticket);
+                    }
+                   else  if (id == "myTicket")
+                    {
+                        return View(db.Tickets.Include(t => t.TicketPriority).Include(t => t.Project).Include(t => t.TicketStatus).Include(t => t.TicketType).Where(p => p.AssigneeId == userId).ToList());
+                    }
+                }
+                else if (role.Contains("Submitter"))
+                {
+                    return View(db.Tickets.Include(t => t.TicketPriority).Include(t => t.Project).Include(t => t.TicketStatus).Include(t => t.TicketType).Where(p => p.CreatorId == userId).ToList());
+                }
             }
+            ViewBag.User = "";
             return View(db.Tickets.Include(t => t.TicketPriority).Include(t => t.Project).Include(t => t.TicketStatus).Include(t => t.TicketType).ToList());
-
-        }
-
-        // GET: Tickets/Details/5
+        }        // GET: Tickets/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -45,11 +70,43 @@ namespace Bug_Tracker.Controllers
             return View(ticket);
         }
         
-        public ActionResult SubmitterTickets()
+        //Submitter Tickets
+        //public ActionResult SubmitterTickets()
+        //{
+        //    string submitterId = User.Identity.GetUserId();
+        //    var tickets = db.Tickets.Where(t => t.CreatorId == submitterId).Include(t => t.Creator).Include(t => t.Assignee).Include(t => t.Project);
+        //    return View("Index", tickets.ToList());
+        //}
+
+        //[Authorize(Roles = "Project Manager, Developer")]
+        ////Project Manager and Developer Tickets
+        //public ActionResult ProjectManagerTickets()
+        //{
+        //    var userId = User.Identity.GetUserId();
+        //    var dbUSer = db.Users.FirstOrDefault(p => p.Id == userId);
+        //    var myProject = dbUSer.Projects.Select(p => p.Id);
+        //    var ticket = db.Tickets.Where(p => myProject.Contains(p.Id)).ToList();
+        //    return View(ticket);
+        //}
+
+        // GET: assign developer to ticket
+        public ActionResult AssignDevelopers(int ticketId)
         {
-            string submitterId = User.Identity.GetUserId();
-            var tickets = db.Tickets.Where(t => t.CreatorId == submitterId).Include(t => t.Creator).Include(t => t.Assignee).Include(t => t.Project);
-            return View("Index", tickets.ToList());
+            var model = new AssignTicketToDeveloper();
+            model.Id = ticketId;
+            var ticket = db.Tickets.FirstOrDefault(p => p.Id == ticketId);
+            var userRoleHelper = new UserRoleHelper();
+            var users = userRoleHelper.UsersInRole("Developer");
+            model.UserList = new SelectList(users, "Id", "Name");
+            return View(model);
+        }
+        [HttpPost]
+        public ActionResult AssignDevelopers(AssignTicketToDeveloper model)
+        {
+            var ticket = db.Tickets.FirstOrDefault(p => p.Id == model.Id);
+            ticket.AssigneeId = model.SelectedUser;
+            db.SaveChanges();
+            return RedirectToAction("Index");
         }
 
         // GET: Tickets/Create

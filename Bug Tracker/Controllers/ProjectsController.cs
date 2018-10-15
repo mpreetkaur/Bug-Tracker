@@ -116,14 +116,14 @@ namespace Bug_Tracker.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
         public ActionResult AssignUsers(int id)
         {
             var model = new ProjectAssignViewModel();
             model.Id = id;
             var project = db.Projects.FirstOrDefault(p => p.Id == id);
             var users = db.Users.ToList();
-            var userIdsAssignedToProject = project.Users
-                .Select(p => p.Id).ToList();
+            var userIdsAssignedToProject = project.Users.Select(p => p.Id).ToList();
             model.UserList = new MultiSelectList(users, "Id", "Name", userIdsAssignedToProject);
             return View(model);
         }

@@ -213,6 +213,7 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Classes\AssignTicket.cs" />
+    <Compile Include="Models\Classes\AssignTicketToDeveloper.cs" />
     <Compile Include="Models\Classes\Project.cs" />
     <Compile Include="Models\Classes\TicketPriority.cs" />
     <Compile Include="Models\Classes\Ticket.cs" />
@@ -369,6 +370,7 @@
     <Content Include="Views\Tickets\Details.cshtml" />
     <Content Include="Views\Tickets\Edit.cshtml" />
     <Content Include="Views\Tickets\Index.cshtml" />
+    <Content Include="Views\Tickets\AssignDevelopers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

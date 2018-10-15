@@ -2,16 +2,16 @@
 @{
     ViewBag.Title = "ChangeRole";
 }
-    <!-- Main content -->
-    <section class="content">
-        <p>
-            User: @Model.Name
-        </p>
-        @using (Html.BeginForm())
-        {
-            @Html.HiddenFor(p => p.Id)
-            @Html.ListBoxFor(p => p.SelectedRoles, Model.Roles)
-            <input type="submit" value="Submit!" />
-        }
-    </section>
-    <!-- /.content -->
+<!-- Main content -->
+<section class="content">
+    <p>
+        User: @Model.Name
+    </p>
+    @using (Html.BeginForm())
+    {
+        @Html.HiddenFor(p => p.Id)
+        @Html.ListBoxFor(p => p.SelectedRoles, Model.Roles)
+        <input type="submit" value="Submit!" />
+    }
+</section>
+<!-- /.content -->

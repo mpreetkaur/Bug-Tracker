@@ -5,49 +5,44 @@
 }
 
 
-    <div class="col-md-8">
-        <section id="loginForm" style="width: 600px">
-            <h2>Index</h2>
-            @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+<div class="col-md-8">
+    <section id="loginForm" style="width: 600px">
+        <h2>Projects</h2>
+        @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+        {
+            <p>
+                @Html.ActionLink("Create New Project", "Create")
+            </p>
+        }
+
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
             {
-                <p>
-                    @Html.ActionLink("Create New Project", "Create")
-                </p>
-            }
-                
-            <table class="table">
                 <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Name)
-                    </th>
-                    <th>
-                        Assigned User
-                    </th>
-                    <th></th>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td></td>
+                    <td>
+                        @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+                        {
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id });
+                        }
+                        |
+                        @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id }) |
+                        @Html.ActionLink("Assign Users", "AssignUsers", new { id = item.Id })
+                    </td>
                 </tr>
+            }
 
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                        <td>
-                            
-                        </td>
-                        <td>
-                            @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
-                            {
-                                @Html.ActionLink("Edit", "Edit", new { id = item.Id }); 
-                            }
-                            |
-                            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                            @Html.ActionLink("Delete", "Delete", new { id = item.Id }) |
-                            @Html.ActionLink("Assign Users", "AssignUsers", new { id = item.Id })
-                        </td>
-                    </tr>
-                }
-
-            </table>
-        </section>
-    </div>
+        </table>
+    </section>
+</div>
