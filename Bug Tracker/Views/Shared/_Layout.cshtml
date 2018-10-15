@@ -143,21 +143,19 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         <a href="@Url.Action("Index","Manage")"><i class="lnr lnr-user"></i> <span>Edit Profile</span></a>
                     </li>
 
-                    @if (User.IsInRole("Admin"))
-                    {
-                    <li><a href="@Url.Action("Index", "ApplicationUsers")"><i class="lnr lnr-users"></i><span>Change Role</span></a></li>
-                    }
-
-                    @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+                    @if (User.IsInRole("Developer"))
                     {
                         <li>
-                            <a href="#"><i class="lnr lnr-list"></i><span>Projects</span></a>
+                            <a href="#"><i class="lnr lnr-tag"></i> <span>Tickets</span></a>
                             <ul class="sub-menu-list">
-                                <li><a href="@Url.Action("Index", "Projects", new { Manager = ""})">All Projects</a></li>
-                                <li><a href="@Url.Action("Index", "Projects",new { Manager = "Manager"})">Your Projects</a></li>
+                                <li><a href="@Url.Action("Index", "Tickets", new { id="" })"> <i class="fa fa-info-circle nav_icon"></i>All Tickets</a></li>
+                                <li><a href="@Url.Action("Index", "Projects",new { Manager = "User"})"><span>Your Projects</span> </a></li>
+                                <li><a href="@Url.Action("Index", "Tickets", new { id = "devTicket" })">><span>Assigned Tickets</span></a></li>
+                                <li> <a href="@Url.Action("index", "Tickets", new { id = "projectsTicket" })"><span class="nav-label">Project Tickets</span> </a></li>
                             </ul>
                         </li>
                     }
+
 
                     @if (User.IsInRole("Submitter"))
                     {
@@ -171,19 +169,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         <li><a href="@Url.Action("Create","Tickets")" class=" hvr-bounce-to-right"><i class="fa fa-dashboard nav_icon "></i><span class="nav-label">Create Ticket</span></a></li>
                     }
 
-                    @if (User.IsInRole("Developer"))
-                    {
-                        <li>
-                            <a href="#"><i class="lnr lnr-tag"></i> <span>Tickets</span></a>
-                            <ul class="sub-menu-list">
-                                <li><a href="@Url.Action("Index", "Tickets", new { id="" })"> <i class="fa fa-info-circle nav_icon"></i>All Tickets</a></li>
-                                <li><a href="@Url.Action("Index", "Projects",new { Manager = "User"})"><span>Your Projects</span> </a></li>
-                                <li><a href="@Url.Action("Index", "Tickets", new { id = "myTicket" })">><span>Assigned Tickets</span></a></li>
-                                <li> <a href="@Url.Action("index", "Tickets", new { id = "myProjectsTicket" })"><span class="nav-label">Project Tickets</span> </a></li>
-                            </ul>
-                        </li>
-                    }
-
                     @if (User.IsInRole("Project Manager"))
                     {
 
@@ -194,6 +179,21 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                                 <li>
                                     <a href="@Url.Action("Index", "Tickets", new { id = "myTicket" })"><span class="nav-label">Project Tickets</span> </a>
                                 </li>
+                            </ul>
+                        </li>
+                    }
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li><a href="@Url.Action("Index", "ApplicationUsers")"><i class="lnr lnr-users"></i><span>Change Role</span></a></li>
+                    }
+
+                    @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+                    {
+                        <li>
+                            <a href="#"><i class="lnr lnr-list"></i><span>Projects</span></a>
+                            <ul class="sub-menu-list">
+                                <li><a href="@Url.Action("Index", "Projects", new { Manager = ""})">All Projects</a></li>
+                                <li><a href="@Url.Action("Index", "Projects",new { Manager = "Manager"})">Your Projects</a></li>
                             </ul>
                         </li>
                     }

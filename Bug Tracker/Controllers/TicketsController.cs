@@ -14,7 +14,7 @@ namespace Bug_Tracker.Controllers
     [Authorize]
     public class TicketsController : Controller
     {
-       private ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
         private UserRoleHelper UserRoleHelper { get; set; }
 
         // GET: Tickets
@@ -36,14 +36,14 @@ namespace Bug_Tracker.Controllers
                 }
                 else if (role.Contains("Developer"))
                 {
-                    if (id == "myProjectsTicket")
+                    if (id == "projectsTicket")
                     {
                         var dbUSer = db.Users.FirstOrDefault(p => p.Id == userId);
                         var myProject = dbUSer.Projects.Select(p => p.Id);
                         var ticket = db.Tickets.Where(p => myProject.Contains(p.Id)).ToList();
                         return View(ticket);
                     }
-                   else  if (id == "myTicket")
+                    else if (id == "devTicket")
                     {
                         return View(db.Tickets.Include(t => t.TicketPriority).Include(t => t.Project).Include(t => t.TicketStatus).Include(t => t.TicketType).Where(p => p.AssigneeId == userId).ToList());
                     }
@@ -55,7 +55,9 @@ namespace Bug_Tracker.Controllers
             }
             ViewBag.User = "";
             return View(db.Tickets.Include(t => t.TicketPriority).Include(t => t.Project).Include(t => t.TicketStatus).Include(t => t.TicketType).ToList());
-        }        // GET: Tickets/Details/5
+        }
+
+        // GET: Tickets/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -69,7 +71,7 @@ namespace Bug_Tracker.Controllers
             }
             return View(ticket);
         }
-        
+
         //Submitter Tickets
         //public ActionResult SubmitterTickets()
         //{
@@ -110,7 +112,7 @@ namespace Bug_Tracker.Controllers
         }
 
         // GET: Tickets/Create
-        [Authorize(Roles ="Submitter")]
+        [Authorize(Roles = "Submitter")]
         public ActionResult Create()
         {
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name");
