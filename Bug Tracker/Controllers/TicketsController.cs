@@ -65,11 +65,38 @@ namespace Bug_Tracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Ticket ticket = db.Tickets.Find(id);
+
             if (ticket == null)
             {
                 return HttpNotFound();
             }
             return View(ticket);
+        }
+
+        //Post Details
+        [HttpPost]
+        public ActionResult CreateComment(int id, string body)
+        {
+            var tickets = db.Tickets
+               .Where(p => p.Id == id)
+               .FirstOrDefault();
+            if (tickets == null)
+            {
+                return HttpNotFound();
+            }
+            if (string.IsNullOrWhiteSpace(body))
+            {
+                ViewBag.ErrorMessage = "Comment is required";
+                return View("Details", new { tickets.Id });
+            }
+            var comment = new TicketComment();
+            comment.UserId = User.Identity.GetUserId();
+            comment.TicketId = tickets.Id;
+            comment.Created = DateTime.Now;
+            comment.Comment = body;
+            db.TicketComments.Add(comment);
+            db.SaveChanges();
+            return RedirectToAction("Details", new { id });
         }
 
         //Submitter Tickets

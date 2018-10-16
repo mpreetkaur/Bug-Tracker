@@ -69,4 +69,4 @@ namespace Bug_Tracker.Models
         public DbSet<TicketComment> TicketComments { get; set; }
         public DbSet<TicketHistory> TicketHistories { get; set; }
     }
-}
+}   
