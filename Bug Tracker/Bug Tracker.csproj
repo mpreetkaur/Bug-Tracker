@@ -210,11 +210,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\StringUtilities.cs" />
     <Compile Include="Helpers\UserRoleHelper.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Classes\AssignTicket.cs" />
     <Compile Include="Models\Classes\AssignTicketToDeveloper.cs" />
+    <Compile Include="Models\Classes\ImageUploadValidator.cs" />
     <Compile Include="Models\Classes\Project.cs" />
     <Compile Include="Models\Classes\TicketAttachment.cs" />
     <Compile Include="Models\Classes\TicketComment.cs" />
@@ -383,6 +385,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Uploads\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Web;
 using System.Web.Mvc;
 using Bug_Tracker.Models;
 using Bug_Tracker.Models.Classes;
@@ -24,7 +26,7 @@ namespace Bug_Tracker.Controllers
             {
                 var userRoleHelper = new UserRoleHelper();
                 var userId = User.Identity.GetUserId();
-                var role = userRoleHelper.GetUserRoles(userId);
+                var role = UserRoleHelper.GetUserRoles(userId);
                 ViewBag.User = "User";
 
                 if (role.Contains("Project Manager"))
@@ -75,11 +77,12 @@ namespace Bug_Tracker.Controllers
 
         //Post Details
         [HttpPost]
+        [Authorize]
         public ActionResult CreateComment(int id, string body)
         {
             var tickets = db.Tickets
-               .Where(p => p.Id == id)
-               .FirstOrDefault();
+           .Where(p => p.Id == id)
+           .FirstOrDefault();
             if (tickets == null)
             {
                 return HttpNotFound();
@@ -173,6 +176,36 @@ namespace Bug_Tracker.Controllers
             ViewBag.TicketStatusId = new SelectList(db.TicketStatuses, "Id", "Name", ticket.TicketStatusId);
             ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name", ticket.TicketTypeId);
             return View(ticket);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateAttachment(int id, [Bind(Include = "Id,Description,TicketId")] TicketAttachment ticketAttachment, HttpPostedFileBase image)
+        {
+
+            if (ModelState.IsValid)
+            {
+
+                if (image == null)
+                {
+                    return HttpNotFound();
+                }
+                if (!ImageUploadValidator.IsWebFriendlyImage(image))
+                {
+                    ViewBag.ErrorMessage = "Please upload an image";
+
+                }
+                var fileName = Path.GetFileName(image.FileName);
+                image.SaveAs(Path.Combine(Server.MapPath("~/Uploads/"), fileName));
+                ticketAttachment.FilePath = "/Uploads/" + fileName;
+                ticketAttachment.UserId = User.Identity.GetUserId();
+                ticketAttachment.Created = DateTime.Now;
+                ticketAttachment.TicketId = id;
+                db.TicketAttachments.Add(ticketAttachment);
+                db.SaveChanges();
+                return RedirectToAction("Details", new { id });
+            }
+            return View(ticketAttachment);
         }
 
         // GET: Tickets/Edit/5
