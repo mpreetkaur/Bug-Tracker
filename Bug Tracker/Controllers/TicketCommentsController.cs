@@ -4,7 +4,9 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Mvc;
 using Bug_Tracker.Models;
 using Bug_Tracker.Models.Classes;
@@ -63,7 +65,6 @@ namespace Bug_Tracker.Controllers
             ViewBag.UserId = new SelectList(db.Users, "Id", "Name", ticketComment.UserId);
             return View(ticketComment);
         }
-
         // GET: TicketComments/Edit/5
         public ActionResult Edit(int? id)
         {

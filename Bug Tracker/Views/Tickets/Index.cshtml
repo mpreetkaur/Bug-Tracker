@@ -48,8 +48,21 @@
                 <th>
                     @Html.DisplayNameFor(model => model.AssigneeId)
                 </th>
+                <th>Details</th>
+                @if (User.Identity.IsAuthenticated && !string.IsNullOrWhiteSpace(ViewBag.User))
+                {
+                    if (User.IsInRole("Developer"))
+                    {
+                        <th>Edit</th>
 
+                    }
+                    if (User.IsInRole("Project Manager"))
+                    {
+                        <th>Assign</th>
+                        <th>Edit</th>
 
+                    }
+                }
             </tr>
         </thead>
         <tbody>

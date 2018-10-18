@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Mvc;
 using Bug_Tracker.Models;
 using Bug_Tracker.Models.Classes;
@@ -18,13 +21,15 @@ namespace Bug_Tracker.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         private UserRoleHelper UserRoleHelper { get; set; }
-
+        public TicketsController()
+        {
+            UserRoleHelper = new UserRoleHelper();
+        }
         // GET: Tickets
         public ActionResult Index(string id)
         {
             if (!string.IsNullOrWhiteSpace(id))
             {
-                var userRoleHelper = new UserRoleHelper();
                 var userId = User.Identity.GetUserId();
                 var role = UserRoleHelper.GetUserRoles(userId);
                 ViewBag.User = "User";
@@ -98,6 +103,15 @@ namespace Bug_Tracker.Controllers
             comment.Created = DateTime.Now;
             comment.Comment = body;
             db.TicketComments.Add(comment);
+            var user = db.Users.FirstOrDefault(p => p.Id == comment.UserId);
+            var personalEmailService = new PersonalEmailService();
+            var mailMessage = new MailMessage(
+            WebConfigurationManager.AppSettings["emailto"], user.Email
+                   );
+            mailMessage.Body = "Added Comment to Ticket! :-)";
+            mailMessage.Subject = "New Assigned Developer";
+            mailMessage.IsBodyHtml = true;
+            personalEmailService.Send(mailMessage);
             db.SaveChanges();
             return RedirectToAction("Details", new { id });
         }
@@ -137,6 +151,15 @@ namespace Bug_Tracker.Controllers
         {
             var ticket = db.Tickets.FirstOrDefault(p => p.Id == model.Id);
             ticket.AssigneeId = model.SelectedUser;
+            var user = db.Users.FirstOrDefault(p => p.Id == model.SelectedUser);
+            var personalEmailService = new PersonalEmailService();
+            var mailMessage = new MailMessage(
+            WebConfigurationManager.AppSettings["emailto"], user.Email
+                   );
+            mailMessage.Body = "You Have been assigned to new Ticket! :-)";
+            mailMessage.Subject = "New Assigned Developer";
+            mailMessage.IsBodyHtml = true;
+            personalEmailService.Send(mailMessage);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
@@ -180,7 +203,7 @@ namespace Bug_Tracker.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateAttachment(int id, [Bind(Include = "Id,Description,TicketId")] TicketAttachment ticketAttachment, HttpPostedFileBase image)
+        public ActionResult CreateAttachment(int id, [Bind(Include = "Id,Description")] TicketAttachment ticketAttachment, HttpPostedFileBase image)
         {
 
             if (ModelState.IsValid)
@@ -234,15 +257,49 @@ namespace Bug_Tracker.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Description,Updated,ProjectId,TicketTypeId,TicketPriorityId,CreatorId,TicketStatusId")] Ticket ticket)
+        public ActionResult Edit([Bind(Include = "Id,Name,Description,TicketTypeId,TicketPriorityId,CreaterId,TicketStatusId,AssigneeId,ProjectId")] Ticket ticket)
         {
             if (ModelState.IsValid)
             {
-                var DBTicket = db.Tickets.FirstOrDefault(p => p.Id == ticket.Id);
-                DBTicket.Name = ticket.Name;
-                DBTicket.Description = ticket.Description;
-                DBTicket.TicketStatusId = ticket.TicketStatusId;
-                DBTicket.Updated = DateTime.Now;
+                var dateChanged = DateTimeOffset.Now;
+                var changes = new List<TicketHistory>();
+                var dbTicket = db.Tickets.First(p => p.Id == ticket.Id);
+                dbTicket.Name = ticket.Name;
+                dbTicket.Description = ticket.Description;
+                dbTicket.TicketTypeId = ticket.TicketTypeId;
+                dbTicket.Updated = dateChanged;
+                var originalValues = db.Entry(dbTicket).OriginalValues;
+                var currentValues = db.Entry(dbTicket).CurrentValues;
+                foreach (var property in originalValues.PropertyNames)
+                {
+                    var originalValue = originalValues[property]?.ToString();
+                    var currentValue = currentValues[property]?.ToString();
+                    if (originalValue != currentValue)
+                    {
+                        var history = new TicketHistory();
+                        history.Changed = dateChanged;
+                        history.NewValue = currentValue;
+                        history.OldValue = originalValue;
+                        history.Property = property;
+                        history.TicketId = dbTicket.Id;
+                        history.UserId = User.Identity.GetUserId();
+                        changes.Add(history);
+                    }
+                }
+                db.TicketHistories.AddRange(changes);
+                if (dbTicket.AssigneeId != null)
+                {
+                    var user = db.Users.FirstOrDefault(p => p.Id == dbTicket.AssigneeId);
+                    var personalEmailService = new PersonalEmailService();
+                    var mailMessage = new MailMessage(
+                    WebConfigurationManager.AppSettings["emailto"], user.Email
+                           );
+                    mailMessage.Body = "Changes to Ticket! :-)";
+                    mailMessage.Subject = "New Assigned Developer";
+                    mailMessage.IsBodyHtml = true;
+                    personalEmailService.Send(mailMessage);
+                }
+
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -252,9 +309,18 @@ namespace Bug_Tracker.Controllers
             ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name", ticket.TicketPriorityId);
             ViewBag.TicketStatusId = new SelectList(db.TicketStatuses, "Id", "Name", ticket.TicketStatusId);
             ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name", ticket.TicketTypeId);
+
             return View(ticket);
         }
+        private string GetValueFromKey(string propertyName, string key)
+        {
+            if (propertyName == "TicketTypeId")
+            {
+                return db.TicketTypes.Find(Convert.ToInt32(key)).Name;
+            }
 
+            return key;
+        }
         // GET: Tickets/Delete/5
         public ActionResult Delete(int? id)
         {
