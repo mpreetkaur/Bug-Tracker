@@ -77,7 +77,7 @@ namespace Bug_Tracker.Migrations
                 new Models.Classes.TicketStatus() { Id = 3, Name = "Not Started" },
                 new Models.Classes.TicketStatus() { Id = 4, Name = "In progress" });
 
-            //context.SaveChanges();
+            context.SaveChanges();
         }
     }
 }

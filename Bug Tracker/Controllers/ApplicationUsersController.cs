@@ -31,6 +31,7 @@ namespace BugTracker.Controllers
             return View(model);
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public ActionResult ChangeRole(UserRoleViewModel model)
         {
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));

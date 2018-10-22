@@ -107,6 +107,7 @@
         <div>
             @using (Html.BeginForm("CreateComment", "Tickets", new { id = Model.Id }, FormMethod.Post))
             {
+                @Html.AntiForgeryToken()
                 <input type="hidden" name="slug" value="@Model.Comments" />
                 <textarea name="Body"></textarea>
                 if (ViewBag.ErrorMessage != null)

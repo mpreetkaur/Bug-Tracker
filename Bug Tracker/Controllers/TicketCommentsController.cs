@@ -10,6 +10,8 @@ using System.Web.Configuration;
 using System.Web.Mvc;
 using Bug_Tracker.Models;
 using Bug_Tracker.Models.Classes;
+using Bug_Tracker.Models.Helpers;
+using Microsoft.AspNet.Identity;
 
 namespace Bug_Tracker.Controllers
 {
