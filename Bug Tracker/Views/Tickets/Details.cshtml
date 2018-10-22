@@ -4,148 +4,214 @@
     ViewBag.Title = "Details";
 }
 
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#myTable').DataTable();
+        });
+    </script>
+}
 <h2>Details</h2>
 
 <div>
     <h4>Ticket</h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Assignee)
-        </dt>
+    <div class="row col-md-12">
 
-        <dd>
-            @Html.DisplayFor(model => model.Assignee.Name)
-        </dd>
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Assignee)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Creator)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Assignee.Name)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Creator.Name)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Creator)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Project)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Creator.Name)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Project.Name)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Project)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.TicketPriority)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Project.Name)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.TicketPriority.Name)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.TicketPriority)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.TicketStatus)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => model.TicketPriority.Name)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.TicketStatus.Name)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.TicketStatus)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.TicketType)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => model.TicketStatus.Name)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.TicketType.Name)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.TicketType)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => model.TicketType.Name)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Name)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Created)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Description)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Created)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Created)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Updated)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Created)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Updated)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Updated)
+            </dt>
 
-    </dl>
-    <div>
+            <dd>
+                @Html.DisplayFor(model => model.Updated)
+            </dd>
 
-        @foreach (var comment in Model.Comments)
-        {
-            <hr />
-            @comment.User.Name
-            <p style="text-align: left; margin-left: 70px">
-                @comment.Comment
-                <span style="font-size: 10px; text-align: right">
-                    - @comment.Created.ToString("dd/mm/yyyy hh:mm")
-                </span>
-            </p>
-        }
+        </dl>
+        <hr />
     </div>
-    <div>
-        @using (Html.BeginForm("CreateComment", "Tickets", new { id = Model.Id }, FormMethod.Post))
-        {
-            <input type="hidden" name="slug" value="@Model.Comments" />
-            <textarea name="Body"></textarea>
-            if (ViewBag.ErrorMessage != null)
+    <div class="col-md-6">
+        <h3>Comments</h3>
+        <div>
+            @using (Html.BeginForm("CreateComment", "Tickets", new { id = Model.Id }, FormMethod.Post))
             {
-                <span>@ViewBag.ErrorMessage</span>
+                <input type="hidden" name="slug" value="@Model.Comments" />
+                <textarea name="Body"></textarea>
+                if (ViewBag.ErrorMessage != null)
+                {
+                    <span>@ViewBag.ErrorMessage</span>
+                }
+                <input type="submit" value="submit" />
             }
-            <input type="submit" value="submit" />
-        }
-    </div>
-    <div>
-        @foreach (var attachment in Model.Attachments)
-        {
-            <hr />
-            @attachment.User.Name
-            <p style="text-align: left; margin-left: 70px">
-                <img style="width:400px; height: 300px" src="@attachment.FilePath" alt="">
-                <span style="font-size: 10px; text-align: right">
-                    - @attachment.Created.ToString("dd/mm/yyyy hh:mm")
-                </span>
-            </p>
-        }
-    </div>
-    <div>
-        @using (Html.BeginForm("CreateAttachment", "Tickets", new { id = Model.Id }, FormMethod.Post, new { enctype = "Multipart/form-data" }))
-        {
-            @Html.AntiForgeryToken()
-            <input name="image" type="file" class="form-control" id="fileUpload" />
-            if (ViewBag.ErrorMessage != null)
+        </div>
+        <div>
+
+            @foreach (var comment in Model.Comments)
             {
-                <span>@ViewBag.ErrorMessage</span>
+                @comment.User.Name
+                <p style="text-align: left; margin-left: 70px">
+                    @comment.Comment
+                    <span style="font-size: 10px; text-align: right">
+                        - @comment.Created.ToString("dd/mm/yyyy hh:mm")
+                    </span>
+                </p>
             }
-            <input type="submit" value="submit" />
-        }
+        </div>
     </div>
+    <div class="row col-md-6">
+        <h3> Attachments</h3>
+        <div class="col-md-4">
+            @using (Html.BeginForm("CreateAttachment", "Tickets", new { id = Model.Id }, FormMethod.Post, new { enctype = "Multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+            <div class="col-md-10" style="padding: 0px">
+                <input name="image" type="file" class="form-control" id="fileUpload" />
+                @if (ViewBag.ErrorMessage != null)
+                {
+                <span>@ViewBag.ErrorMessage</span>
+                }
+            </div>
+
+                <div class="col-md-1">
+                    <input type="submit" value="submit" />
+                </div>
+
+            }
+        </div>
+        <div class="col-md-12">
+            @foreach (var attachment in Model.Attachments)
+            {
+
+                <p style="text-align: left; margin-left: 70px">
+                    @*<img style="width:400px; height: 300px" src="@attachment.FilePath" alt="">*@
+                    <a href="@attachment.FilePath">View File</a>
+                    <span style="font-size: 10px; text-align: right">
+                        - @attachment.Created.ToString("dd/mm/yyyy hh:mm")  By(@attachment.User.Name)
+                    </span>
+                </p>
+            }
+        </div>
+    </div>
+
+
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+<hr />
+<div class="row col-md-12">
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</div>
+
+<div class="row col-md-12">
+    <h2>Changes To Ticket</h2>
+    <table id="myTable" class="table">
+        <thead>
+            <tr>
+                <th>Property Changed</th>
+                <th>Old Value</th>
+                <th>New Value</th>
+                <th>Changed</th>
+                <th>Modifier</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var history in Model.Histories)
+            {
+                <tr>
+                    <td>
+                        @history.Property
+                    </td>
+                    <td>
+                        @history.OldValue
+                    </td>
+                    <td>
+                        @history.NewValue
+                    </td>
+                    <td>
+                        @history.Changed
+                    </td>
+                    <td>
+                        @history.User.Name
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
 
 

@@ -194,6 +194,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                             </ul>
                         </li>
                     }
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li>
+                            <a href="#"><i class="lnr lnr-tag"></i><span>Tickets</span></a>
+                            <ul class="sub-menu-list">
+                                <li><a href="@Url.Action("index", "Tickets", new { id = ""})">All Tickets</a></li>
+                            </ul>
+                        </li>
+                    }
                 </ul>
                 <!--sidebar nav end-->
             </div>
@@ -223,11 +232,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             <!-- //header-ends -->
             @RenderBody()
         </div>
-        <!--footer section start-->
-        <footer>
-            <p>All Rights Reserved | Manpreet</p>
-        </footer>
-        <!--footer section end-->
     </section>
 
 
