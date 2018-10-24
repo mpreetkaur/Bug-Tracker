@@ -38,6 +38,7 @@ namespace Bug_Tracker.Migrations
                 roleManager.Create(new IdentityRole { Name = "Submitter" });
             }
 
+            //demo admin user
             ApplicationUser adminUser = new ApplicationUser();
 
             if (!context.Users.Any(item => item.UserName == "admin@bgTracker.com"))
@@ -58,6 +59,74 @@ namespace Bug_Tracker.Migrations
             {
                 userManager.AddToRole(adminUser.Id, "Admin");
             }
+
+            //demo project manager
+            ApplicationUser pmUser = new ApplicationUser();
+
+            if (!context.Users.Any(item => item.UserName == "pManager@bgTracker.com"))
+            {
+                pmUser.UserName = "pManager@bgTracker.com";
+                pmUser.Email = "pManager@bgTracker.com";
+                pmUser.Name = "Project Manager";
+                pmUser.LastName = "Manager";
+                pmUser.FirstName = "Project";
+                pmUser.DisplayName = "Project Manager";
+                userManager.Create(pmUser, "Password-1");
+            }
+            else
+            {
+                pmUser = context.Users.FirstOrDefault(item => item.UserName == "pManager@bgTracker.com");
+            }
+            if (!userManager.IsInRole(pmUser.Id, "Project Manager"))
+            {
+                userManager.AddToRole(pmUser.Id, "Project Manager");
+            }
+            //demo developer
+
+            ApplicationUser devUser = new ApplicationUser();
+
+            if (!context.Users.Any(item => item.UserName == "dev@bgTracker.com"))
+            {
+                devUser.UserName = "dev@bgTracker.com";
+                devUser.Email = "dev@bgTracker.com";
+                devUser.Name = "Developer";
+                devUser.LastName = "dev";
+                devUser.FirstName = "Demo";
+                devUser.DisplayName = "Developer";
+                userManager.Create(devUser, "Password-1");
+            }
+            else
+            {
+                devUser = context.Users.FirstOrDefault(item => item.UserName == "dev@bgTracker.com");
+            }
+            if (!userManager.IsInRole(devUser.Id, "Developer"))
+            {
+                userManager.AddToRole(devUser.Id, "Developer");
+            }
+
+
+            //demo submitter
+            ApplicationUser subUser = new ApplicationUser();
+
+            if (!context.Users.Any(item => item.UserName == "sub@bgTracker.com"))
+            {
+                subUser.UserName = "sub@bgTracker.com";
+                subUser.Email = "sub@bgTracker.com";
+                subUser.Name = "Submitter";
+                subUser.LastName = "sub";
+                subUser.FirstName = "Demo";
+                subUser.DisplayName = "Submitter";
+                userManager.Create(subUser, "Password-1");
+            }
+            else
+            {
+                subUser = context.Users.FirstOrDefault(item => item.UserName == "sub@bgTracker.com");
+            }
+            if (!userManager.IsInRole(subUser.Id, "Submitter"))
+            {
+                userManager.AddToRole(subUser.Id, "Submitter");
+            }
+
 
             context.TicketTypes.AddOrUpdate(x => x.Id,
                 new Models.Classes.TicketType() { Id = 1, Name = "Bug Fixes" },

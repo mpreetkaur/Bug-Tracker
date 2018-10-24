@@ -3,14 +3,21 @@
 @{
     ViewBag.Title = "Index";
 }
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#myTable').DataTable();
+        });
+    </script>
+}
 <h2>Application Users</h2>
 
 @*<p>
-        @Html.ActionLink("Create New", "Create")
-    </p>*@
+    @Html.ActionLink("Create New", "Create")
+</p>*@
 <div id="page-wrapper">
     <div class="graphs">
-        <table class="table">
+        <table id="myTable" class="table">
 
             <thead>
                 <tr>
@@ -20,6 +27,12 @@
                     <th>
                         @Html.DisplayNameFor(model => model.Email)
                     </th>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <th>
+                            Change Role
+                        </th>
+                    }
                 </tr>
             </thead>
 

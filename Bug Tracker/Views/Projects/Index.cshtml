@@ -4,10 +4,17 @@
     ViewBag.Title = "Index";
 }
 
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#myTable').DataTable();
+        });
+    </script>
+}
 
-<div class="col-md-8">
-    <section id="loginForm" style="width: 600px">
-        <h2>Projects</h2>
+<h2>Projects</h2>
+<div id="page-wrapper">
+    <div class="graphs">
         @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
         {
             <p>
@@ -15,21 +22,24 @@
             </p>
         }
 
-        <table class="table">
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Name)
-                </th>
-                <th></th>
-            </tr>
+        <table id="myTable" class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+
 
             @foreach (var item in Model)
             {
+            <tbody>
                 <tr>
                     <td>
                         @Html.DisplayFor(modelItem => item.Name)
                     </td>
-                    <td></td>
                     <td>
                         @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
                         {
@@ -41,8 +51,10 @@
                         @Html.ActionLink("Assign Users", "AssignUsers", new { id = item.Id })
                     </td>
                 </tr>
+            </tbody>
+
             }
 
         </table>
-    </section>
+    </div>
 </div>

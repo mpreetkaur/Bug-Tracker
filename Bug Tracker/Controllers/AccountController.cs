@@ -17,12 +17,14 @@ namespace Bug_Tracker.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext db;
 
         public AccountController()
         {
+            db = new ApplicationDbContext();
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -34,9 +36,9 @@ namespace Bug_Tracker.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -90,7 +92,34 @@ namespace Bug_Tracker.Controllers
                     return View(model);
             }
         }
-
+        [OverrideAuthorization]
+        public ActionResult LoginDemoUsers(string name)
+        {
+            ApplicationUser user = null;
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            if (name == "Admin")
+            {
+                user = UserManager.FindByName("admin@bgTracker.com");
+            }
+            if (name == "Project Manager")
+            {
+                user = UserManager.FindByName("pManager@bgTracker.com");
+            }
+            if (name == "Developer")
+            {
+                user = UserManager.FindByName("dev@bgTracker.com");
+            }
+            if (name == "Submitter")
+            {
+                user = UserManager.FindByName("sub@bgTracker.com");
+            }
+            if(user != null)
+            {
+                var signInManager = HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
+                signInManager.SignIn(user, isPersistent: false, rememberBrowser: false);
+            }
+            return RedirectToAction("Index", "");
+        }
         //
         // GET: /Account/VerifyCode
         [AllowAnonymous]
@@ -120,7 +149,7 @@ namespace Bug_Tracker.Controllers
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -160,7 +189,7 @@ namespace Bug_Tracker.Controllers
                 }
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
