@@ -48,6 +48,7 @@ namespace Bug_Tracker.Controllers
         }
 
         // GET: Projects/Create
+        [Authorize(Roles = "Admin, Project Manager")]
         public ActionResult Create()
         {
             return View();
@@ -58,6 +59,7 @@ namespace Bug_Tracker.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Project Manager")]
         public ActionResult Create([Bind(Include = "Id,Name")] Project project)
         {
             if (ModelState.IsValid)
@@ -71,6 +73,7 @@ namespace Bug_Tracker.Controllers
         }
 
         // GET: Projects/Edit/5
+        [Authorize(Roles = "Admin, Project Manager")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -90,6 +93,7 @@ namespace Bug_Tracker.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Project Manager")]
         public ActionResult Edit([Bind(Include = "Id,Name")] Project project)
         {
             if (ModelState.IsValid)
@@ -127,6 +131,7 @@ namespace Bug_Tracker.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "Admin, Project Manager")]
         public ActionResult AssignUsers(int id)
         {
             var model = new ProjectAssignViewModel();
@@ -137,7 +142,9 @@ namespace Bug_Tracker.Controllers
             model.UserList = new MultiSelectList(users, "Id", "Name", userIdsAssignedToProject);
             return View(model);
         }
+
         [HttpPost]
+        [Authorize(Roles = "Admin, Project Manager")]
         public ActionResult AssignUsers(ProjectAssignViewModel model)
         {
             //STEP 1: Find the project

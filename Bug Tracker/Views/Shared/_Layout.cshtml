@@ -1,66 +1,4 @@
-﻿@*<!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>@ViewBag.Title - My ASP.NET Application</title>
-        @Styles.Render("~/Content/css")
-        @Scripts.Render("~/bundles/modernizr")
-        <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
-
-    </head>
-    <body>
-        <div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-                </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                        <li>@Html.ActionLink("About", "About", "Home")</li>
-                        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                    </ul>
-                    @Html.Partial("_LoginPartial")
-                </div>
-            </div>
-        </div>
-
-
-        <!--=====================================================================1-->
-
-        <div class="container body-content">
-            @RenderBody()
-            <hr />
-        </div>
-        <!--=====================================================================1-->
-        <footer>
-            <p>&copy 2015 Easy Admin Panel. All Rights Reserved | Design by <a href="https://w3layouts.com/" target="_blank">w3layouts.</a></p>
-        </footer>
-        <!--footer section end-->    @*<script src="js/bootstrap.min.js"></script>
-
-        </section>
-
-        <script src="js/jquery.nicescroll.js"></script>
-        <script src="~/Scripts/jquery.nicescroll.js"></script>
-
-        <script src="js/scripts.js"></script>
-        <script src="~/Scripts/scripts.js"></script>
-        <!-- Bootstrap Core JavaScript -->
-        <script src="~/Scripts/bootstrap.min.js"></script>
-
-
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
-    </body>
-    </html>*@
-<!--
+﻿<!--
 Author: W3layouts
 Author URL: http://w3layouts.com
 License: Creative Commons Attribution 3.0 Unported
@@ -160,11 +98,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                             <a href="#"><i class="lnr lnr-tag"></i> <span>Tickets</span></a>
                             <ul class="sub-menu-list">
                                 <li><a href="@Url.Action("Index", "Tickets", new { id="" })">All Tickets</a></li>
-                                <li><a href="@Url.Action("Index", "Projects",new { Manager = "User"})">Your Projects</a></li>
                                 <li><a href="@Url.Action("Index", "Tickets", new { id = "devTicket" })">Assigned Tickets</a></li>
                                 <li><a href="@Url.Action("index", "Tickets", new { id = "projectsTicket" })">Project Tickets</a></li>
                             </ul>
                         </li>
+                        <li><a href="@Url.Action("Index", "Projects",new { Manager = "User"})"><i class="lnr lnr-chart-bars"></i><span>Your Projects</span></a></li>
+
                     }
 
 
@@ -192,11 +131,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     }
                     @if (User.IsInRole("Admin"))
                     {
-                        <li><a href="@Url.Action("Index", "ApplicationUsers")"><i class="lnr lnr-users"></i><span>Change Role</span></a></li>
+                        <li><a href="@Url.Action("Index", "ApplicationUsers")"><i class="lnr lnr-sync"></i><span>Change Role</span></a></li>
                     }
 
                     @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
                     {
+                        <li><a href="@Url.Action("Create", "Projects")"><i class="lnr lnr-pencil"></i><span>Create New Project</span></a></li>
+
                         <li class="menu-list">
                             <a href="#"><i class="lnr lnr-list"></i><span>Projects</span></a>
                             <ul class="sub-menu-list">
