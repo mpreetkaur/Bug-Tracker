@@ -241,6 +241,7 @@ namespace Bug_Tracker.Controllers
         }
 
         // GET: Tickets/Edit/5
+        [Authorize(Roles = "Project Manager, Developers")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -266,6 +267,7 @@ namespace Bug_Tracker.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Project Manager, Developers")]
         public ActionResult Edit([Bind(Include = "Id,Name,Description,TicketTypeId,TicketPriorityId,TicketStatusId,AssigneeId")] Ticket ticket)
         {
             if (ModelState.IsValid)
