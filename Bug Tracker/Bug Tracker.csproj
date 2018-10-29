@@ -318,18 +318,11 @@
     <Content Include="Scripts\wow.min.js" />
     <Content Include="Views\ApplicationUsers\ChangeRole.cshtml" />
     <Content Include="Views\ApplicationUsers\Index.cshtml" />
-    <None Include="Views\Home\blank_page.cshtml" />
-    <None Include="Views\Home\charts.cshtml" />
     <None Include="Views\Home\codes.cshtml" />
     <None Include="Views\Home\compose-mail.cshtml" />
     <None Include="Views\Home\forms.cshtml" />
     <None Include="Views\Home\grids.cshtml" />
-    <None Include="Views\Home\inbox.cshtml" />
-    <None Include="Views\Home\media.cshtml" />
-    <None Include="Views\Home\sign-in.cshtml" />
     <None Include="Views\Home\sign-up.cshtml" />
-    <None Include="Views\Home\tables.cshtml" />
-    <None Include="Views\Home\widgets.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

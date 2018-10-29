@@ -45,7 +45,7 @@ namespace Bug_Tracker.Migrations
             {
                 adminUser.UserName = "admin@bgTracker.com";
                 adminUser.Email = "admin@bgTracker.com";
-                adminUser.Name = "Admin";
+                adminUser.Name = "Demo Admin";
                 adminUser.LastName = "User";
                 adminUser.FirstName = "Admin";
                 adminUser.DisplayName = "Admin";
@@ -67,7 +67,7 @@ namespace Bug_Tracker.Migrations
             {
                 pmUser.UserName = "pManager@bgTracker.com";
                 pmUser.Email = "pManager@bgTracker.com";
-                pmUser.Name = "Project Manager";
+                pmUser.Name = "Demo Project Manager";
                 pmUser.LastName = "Manager";
                 pmUser.FirstName = "Project";
                 pmUser.DisplayName = "Project Manager";
@@ -89,7 +89,7 @@ namespace Bug_Tracker.Migrations
             {
                 devUser.UserName = "dev@bgTracker.com";
                 devUser.Email = "dev@bgTracker.com";
-                devUser.Name = "Developer";
+                devUser.Name = "Demo Developer";
                 devUser.LastName = "dev";
                 devUser.FirstName = "Demo";
                 devUser.DisplayName = "Developer";
@@ -112,7 +112,7 @@ namespace Bug_Tracker.Migrations
             {
                 subUser.UserName = "sub@bgTracker.com";
                 subUser.Email = "sub@bgTracker.com";
-                subUser.Name = "Submitter";
+                subUser.Name = "Demo Submitter";
                 subUser.LastName = "sub";
                 subUser.FirstName = "Demo";
                 subUser.DisplayName = "Submitter";

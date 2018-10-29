@@ -176,10 +176,13 @@ namespace Bug_Tracker.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Submitter")]
-        public ActionResult Create([Bind(Include = "Id,Name,Description,AssignId,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId")] Ticket ticket)
+        public ActionResult Create([Bind(Include = "Id,Name,Description,AssignId,AssigneeId,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId")] Ticket ticket)
         {
             if (ModelState.IsValid)
             {
+                var userId = User.Identity.GetUserId();
+                var dbUser = db.Users.FirstOrDefault(p => p.Id == userId);
+                var myProject = dbUser.Projects.Select(p => p.Id);
                 ticket.CreatorId = User.Identity.GetUserId();
                 ticket.TicketStatusId = 3;
                 db.Tickets.Add(ticket);
@@ -241,7 +244,7 @@ namespace Bug_Tracker.Controllers
         }
 
         // GET: Tickets/Edit/5
-        [Authorize(Roles = "Project Manager, Developers")]
+        [Authorize(Roles = "Project Manager, Developer, Submitter")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -267,19 +270,30 @@ namespace Bug_Tracker.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Project Manager, Developers")]
+        [Authorize(Roles = "Project Manager, Developer, Submitter")]
         public ActionResult Edit([Bind(Include = "Id,Name,Description,TicketTypeId,TicketPriorityId,TicketStatusId,AssigneeId")] Ticket ticket)
         {
             if (ModelState.IsValid)
             {
+
+                var userId = User.Identity.GetUserId();
+
+                var dbUser = db.Users.FirstOrDefault(p => p.Id == userId);
+                var myProject = dbUser.Projects.Select(p => p.Id);
+                var dbTicket = db.Tickets.First(p => p.Id == ticket.Id);
                 var dateChanged = DateTimeOffset.Now;
                 var changes = new List<TicketHistory>();
-                var dbTicket = db.Tickets.First(p => p.Id == ticket.Id);
-                dbTicket.Name = ticket.Name;
-                dbTicket.Description = ticket.Description;
-                dbTicket.TicketTypeId = ticket.TicketTypeId;
-                dbTicket.Updated = dateChanged;
-                dbTicket.TicketStatusId = ticket.TicketStatusId;
+                var pticket = db.Tickets.Where(p => myProject.Contains(p.ProjectId)).ToList();
+                if ((User.IsInRole("Project Manager") && pticket.Any(p => p.Id == ticket.Id)) ||
+                    (User.IsInRole("Submitter") && ticket.CreatorId == userId) ||
+                    (User.IsInRole("Developer") && ticket.AssigneeId == userId))
+                {
+                    dbTicket.Name = ticket.Name;
+                    dbTicket.Description = ticket.Description;
+                    dbTicket.TicketTypeId = ticket.TicketTypeId;
+                    dbTicket.Updated = dateChanged;
+                    dbTicket.TicketStatusId = ticket.TicketStatusId;
+                }
                 var originalValues = db.Entry(dbTicket).OriginalValues;
                 var currentValues = db.Entry(dbTicket).CurrentValues;
                 foreach (var property in originalValues.PropertyNames)
